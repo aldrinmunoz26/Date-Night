@@ -16,19 +16,13 @@
             align-items: center;
             margin: 0;
             overflow-x: hidden;
-            transition: background 1s ease; /* Smooth transition for fireplace */
+            transition: background 0.5s ease;
         }
 
-        /* The Fireplace Background Class (Activated via JS) */
+        /* The NEW Fireplace Background Class */
         .fireplace-bg {
-            background: url('https://media.giphy.com/media/l0HlHjglezj9TjCiY/giphy.gif') no-repeat center center fixed !important;
+            background: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGE3eDFjOWFjbGRlMHJxdzZhOGpiNHhyMTRtNDloYXM4eXRlNnVoNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/10TZs8ho7qJeVy/giphy.gif') no-repeat center center fixed !important;
             background-size: cover !important;
-        }
-        
-        /* Darker overlay for text readability on top of fire */
-        .fireplace-bg .container {
-            background: rgba(255, 255, 255, 0.90);
-            box-shadow: 0 0 50px rgba(255, 69, 0, 0.5); /* Orange glow */
         }
 
         .container { 
@@ -37,14 +31,14 @@
             padding: 40px; 
             border-radius: 30px; 
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); 
             max-width: 600px;
             width: 90%;
             border: 1px solid rgba(255,255,255,0.3);
             margin: 20px auto;
             position: relative;
             z-index: 10;
-            transition: all 1s ease;
+            transition: all 0.5s ease;
         }
 
         h1 { color: #d81b60; font-size: 28px; margin-bottom: 20px; }
@@ -78,7 +72,7 @@
         .chaos-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: hidden; }
         
         /* BIGGER CATS */
-        .flying-cat { position: absolute; width: 180px; } /* Made bigger */
+        .flying-cat { position: absolute; width: 180px; }
         .floating-heart { position: absolute; font-size: 60px; animation: floatUp 4s linear infinite; }
 
         @keyframes fly1 { 0% { left: -200px; top: 20%; } 100% { left: 110%; top: 40%; } }
@@ -92,7 +86,7 @@
         .pumping-heart { font-size: 60px; animation: heartbeat 0.8s infinite; display: inline-block; margin: 10px; }
         
         /* YouTube Hidden Player */
-        #youtube-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+        #youtube-player { position: absolute; top: -9999px; left: -9999px; }
 
     </style>
 </head>
@@ -177,14 +171,20 @@
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        // Setup YouTube Player
+        // Setup YouTube Player with new Song ID
         var player;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', {
-                height: '0',
-                width: '0',
-                videoId: '2Hp6j5Rj1VI', // Andrea Bocelli - Besame Mucho
-                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': '2Hp6j5Rj1VI' },
+                height: '1',
+                width: '1',
+                videoId: 'g4M0hH1R2eU', // Besame Mucho
+                playerVars: { 
+                    'autoplay': 0, 
+                    'controls': 0, 
+                    'loop': 1, 
+                    'playlist': 'g4M0hH1R2eU',
+                    'playsinline': 1 
+                },
                 events: { 'onReady': onPlayerReady }
             });
         }
@@ -196,10 +196,14 @@
             // 1. Activate Fireplace Mode
             document.body.classList.add('fireplace-bg');
             
-            // 2. Play Music (Unmute needed for autoplay policies)
+            // 2. Play Music (Force Unmute)
             if(player && player.playVideo) {
-                player.unMute();
-                player.playVideo();
+                try {
+                    player.unMute();
+                    player.playVideo();
+                } catch(e) {
+                    console.log("Audio issue: " + e);
+                }
             }
 
             // 3. Confetti
