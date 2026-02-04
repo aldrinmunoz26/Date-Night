@@ -24,61 +24,47 @@
             border-radius: 30px; 
             text-align: center;
             box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
-            max-width: 600px; /* Bigger container as requested */
+            max-width: 600px;
             width: 90%;
             border: 1px solid rgba(255,255,255,0.3);
             margin: 20px;
-        }
-
-        h1 { color: #d81b60; font-size: 28px; margin-bottom: 20px; }
-        
-        /* Fixed Gif Sizing */
-        .gif { width: 100%; max-height: 350px; border-radius: 20px; margin-bottom: 20px; object-fit: contain; background: transparent; }
-
-        .btn-container { 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            height: 100px;
             position: relative;
         }
 
-        button { 
-            padding: 15px 30px; 
-            font-size: 18px; 
-            font-weight: bold;
-            border-radius: 50px; 
-            border: none; 
-            cursor: pointer; 
-            transition: all 0.2s;
-        }
+        h1 { color: #d81b60; font-size: 28px; margin-bottom: 20px; }
+        .gif { width: 100%; max-height: 300px; border-radius: 20px; margin-bottom: 20px; object-fit: contain; }
 
+        .btn-container { display: flex; justify-content: center; align-items: center; gap: 20px; height: 100px; }
+        
+        button { padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; transition: all 0.2s; }
         #yesBtn { background-color: #ff4081; color: white; box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4); }
-        #noBtn { background-color: #fce4ec; color: #ad1457; position: fixed; z-index: 999; transition: left 0.15s ease, top 0.15s ease; }
+        
+        /* Fixed No Button Logic - Stays near the center */
+        #noBtn { background-color: #fce4ec; color: #ad1457; position: fixed; z-index: 999; transition: all 0.1s ease; }
 
         .hidden { display: none; }
 
-        /* Larger Grid for Food & Activities */
-        .options-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
-            margin-top: 20px;
-            padding: 10px;
-        }
+        /* Calendar Styling */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: white; padding: 15px; border-radius: 15px; border: 2px solid #f8bbd0; }
+        .day { padding: 10px; border-radius: 8px; cursor: pointer; font-size: 14px; border: 1px solid #eee; }
+        .day:hover { background: #fce4ec; }
+        .selected { background: #ff4081 !important; color: white; border-color: #d81b60; }
+        .day-name { font-weight: bold; color: #d81b60; padding-bottom: 10px; }
 
-        .opt-card {
-            background: white;
-            border: 2px solid #f8bbd0;
-            border-radius: 20px;
-            padding: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .opt-card:hover { transform: translateY(-5px); border-color: #ff4081; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        /* Grid for Options */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .opt-card { background: white; border: 2px solid #f8bbd0; border-radius: 20px; padding: 15px; cursor: pointer; transition: 0.3s; }
+        .opt-card:hover { transform: translateY(-5px); border-color: #ff4081; }
         .icon-img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; }
         .opt-card span { display: block; font-size: 16px; font-weight: bold; color: #880e4f; }
+
+        /* Heart Pump Animation */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .pumping-heart { font-size: 50px; animation: heartbeat 0.8s infinite; display: inline-block; }
     </style>
 </head>
 <body>
@@ -93,15 +79,16 @@
     </div>
 
     <div class="container hidden" id="page2">
-        <img class="gif" src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDI0a2doYW8ybnh4bG5iZmFpNHFsNGJ4a2drNmV6ZDQ4ajJ0d2UyayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6eTorge9nMrlMY9RIL/giphy.gif">
+        <img class="gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTduemZ2bmY3YXN5Z3RkZ3V5Z3V5Z3V5Z3V5Z3V5Z3V5Z3V5Z3V5JmN0PWc/3o7TKSjPqcK0pIuJKo/giphy.gif">
         <h1>¡Qué alegría! 🥰</h1>
-        <p>¿Qué día(s) prefieres?</p>
-        <div class="options-grid">
-            <button class="opt-card" onclick="nextPage(3)"><span>Jueves 12</span></button>
-            <button class="opt-card" onclick="nextPage(3)"><span>Viernes 13</span></button>
-            <button class="opt-card" onclick="nextPage(3)"><span>Sábado 14</span></button>
-            <button class="opt-card" onclick="nextPage(3)"><span>Domingo 15</span></button>
+        <p>¿Qué día(s) de febrero estás libre? (Selecciona los que quieras)</p>
+        <div class="calendar-grid">
+            <div class="day-name">L</div><div class="day-name">M</div><div class="day-name">M</div><div class="day-name">J</div><div class="day-name">V</div><div class="day-name">S</div><div class="day-name">D</div>
+            <div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day"></div><div class="day" onclick="toggleDate(this)">1</div>
+            <div class="day" onclick="toggleDate(this)">2</div><div class="day" onclick="toggleDate(this)">3</div><div class="day" onclick="toggleDate(this)">4</div><div class="day" onclick="toggleDate(this)">5</div><div class="day" onclick="toggleDate(this)">6</div><div class="day" onclick="toggleDate(this)">7</div><div class="day" onclick="toggleDate(this)">8</div>
+            <div class="day" onclick="toggleDate(this)">9</div><div class="day" onclick="toggleDate(this)">10</div><div class="day" onclick="toggleDate(this)">11</div><div class="day" onclick="toggleDate(this)">12</div><div class="day" onclick="toggleDate(this)">13</div><div class="day" onclick="toggleDate(this)">14</div><div class="day" onclick="toggleDate(this)">15</div>
         </div>
+        <button id="yesBtn" style="margin-top: 20px;" onclick="nextPage(3)">Siguiente</button>
     </div>
 
     <div class="container hidden" id="page3">
@@ -128,24 +115,34 @@
         <h1>¿Qué prefieres hacer? 🗺️</h1>
         <div class="options-grid">
             <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400"><span>Cine</span></div>
-            <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://images.unsplash.com/photo-1629713014426-136a4a11fbb2?w=400"><span>Boliche</span></div>
-            <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://images.squarespace-cdn.com/content/v1/59df95b3d7bdce66d123910c/1510618037042-8D9J8B8O8V0A0W5A0W5A/Miscellany+Oxford+MS"><span>Miscelania</span></div>
-            <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://images.unsplash.com/photo-1624220333036-70e0a9699694?w=400"><span>Explorar Memphis</span></div>
-            <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?w=400"><span>Zoo/Botanical</span></div>
+            <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://media.istockphoto.com/id/157528129/photo/bowling-strike.jpg?s=612x612&w=0&k=20&c=W07Y3Q9I0Z0Z0Z0Z0Z0Z0Z0Z0Z0Z0Z0Z0Z0Z0Z0Z0Z0="><span>Boliche</span></div>
+            <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://oxfordmag.com/wp-content/uploads/sites/11/2025/12/miscellanea-20251009-0375-1-1-1.jpg?w=1280"><span>Miscellanea</span></div>
+            <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://big-cypress.com/wp-content/uploads/bb-plugin/cache/fishing-guide-memphis-bass-pro-pyramid-1800-landscape-99662ebbeefab31adaa2c14b19b6ec0d-mqktrnwuycv7.jpg"><span>Explorar Memphis</span></div>
+            <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://media-cdn.tripadvisor.com/media/photo-s/02/29/db/0b/front-entrance.jpg"><span>Zoo/Botanical</span></div>
             <div class="opt-card" onclick="nextPage(5)"><img class="icon-img" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjZla2g2bXgzZHQwZmJocW9rdmQ4eDRuYWZ3MzUxcjZoMnk4eHRiciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ma7VlDSlty3EA/giphy.gif"><span>Otro</span></div>
         </div>
     </div>
 
     <div class="container hidden" id="page5">
+        <div style="display: flex; justify-content: space-around;">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnU4YXh3Yml4eHhxbm96Y3B6amZ4bm96Y3B6amZ4bm8mZXB9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/mlvseq9yvZhba/giphy.gif" style="width: 80px;">
+            <span class="pumping-heart">❤️</span>
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnU4YXh3Yml4eHhxbm96Y3B6amZ4bm96Y3B6amZ4bm8mZXB9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/mlvseq9yvZhba/giphy.gif" style="width: 80px;">
+        </div>
         <img class="gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDY0Ym9odzZ6dzExOXI4amJ5ZTR4eTNsejc5ZXFvbzJveWFocDJuYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kJGLD1ctyrlqU/giphy.gif">
-        <h1>¡Anotado! ❤️</h1>
-        <p>¡Nos vemos muy pronto!</p>
+        <h1>¡ANOTADO! ❤️</h1>
+        <p>¡Eres la mejor! Te veo pronto para nuestra cita.</p>
+        <div style="font-size: 30px;">🐱🌈🎉💥</div>
     </div>
 
     <script>
         function celebrateAndNext() {
-            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+            confetti({ particleCount: 250, spread: 100, origin: { y: 0.6 } });
             nextPage(2);
+        }
+
+        function toggleDate(element) {
+            element.classList.toggle('selected');
         }
 
         function showSurprise() {
@@ -155,10 +152,9 @@
 
         function moveNo() {
             const noBtn = document.getElementById('noBtn');
-            const padding = 100;
-            // Calculation that keeps button strictly within the visible window
-            const maxX = Math.max(0, window.innerWidth - noBtn.offsetWidth - padding);
-            const maxY = Math.max(0, window.innerHeight - noBtn.offsetHeight - padding);
+            const padding = 150; // Increased padding to keep it from flying too far
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
             const randomX = Math.floor(Math.random() * maxX) + (padding / 2);
             const randomY = Math.floor(Math.random() * maxY) + (padding / 2);
             noBtn.style.left = randomX + 'px';
@@ -169,7 +165,21 @@
             if(pageNumber > 1) document.getElementById('noBtn').style.display = 'none';
             document.querySelectorAll('.container').forEach(el => el.classList.add('hidden'));
             document.getElementById('page' + pageNumber).classList.remove('hidden');
-            window.scrollTo(0,0);
+            
+            // Extra fireworks for the final page
+            if(pageNumber === 5) {
+                var duration = 5 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+                function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) return clearInterval(interval);
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+            }
         }
     </script>
 </body>
